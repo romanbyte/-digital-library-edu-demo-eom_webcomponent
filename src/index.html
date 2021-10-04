@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stencil Component Starter</title>
+    <link rel="stylesheet" href="/build/demo-eom.css">
+  </head>
+  <body>
+    <demo-eom />
+
+    <script>
+      const demoEom = document.querySelector('demo-eom');
+
+      demoEom.addEventListener('xApiMessage', (evt) => {
+        console.log('[XAM]', evt.detail);
+      });
+    </script>
+
+    <script type="module" src="/build/demo-eom.esm.js"></script>
+    <script nomodule src="/build/demo-eom.js"></script>
+  </body>
+</html>

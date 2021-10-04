@@ -1,0 +1,30 @@
+{
+  "name": "demo-eom-web-component",
+  "version": "0.0.1",
+  "description": "Stencil Component Starter",
+  "main": "dist/index.cjs.js",
+  "module": "dist/custom-elements/index.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/custom-elements/index.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/demo-eom/demo-eom.esm.js",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "stencil build --prod",
+    "dev": "stencil build --dev --watch --serve"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.10.1",
+    "@stencil/core": "^2.7.0",
+    "bootstrap": "^5.1.1",
+    "stenciljs-bootstrap": "^0.0.28-dev"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^2.4.1"
+  }
+}
