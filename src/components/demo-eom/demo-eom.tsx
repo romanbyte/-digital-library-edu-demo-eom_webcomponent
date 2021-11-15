@@ -103,123 +103,92 @@ export class DemoEOM {
         .forEach((tab) => tab.classList.remove('show', 'active'));
 
       const pills = document.querySelectorAll<HTMLElement>(
-        '.nav-pills > .nav-item > .nav-link'
+        '#tasks-tabs > .page-item > .page-link'
       );
 
-      targetPill.classList.add('active');
+      targetPill.parentElement.classList.add('active');
       [...pills]
         .filter((pill) => pill.dataset.taskNumber !== `${taskNumber}`)
-        .forEach((pill) => pill.classList.remove('active'));
+        .forEach((pill) => pill.parentElement.classList.remove('active'));
 
       this.sendXApiMessage(Verb.Launched, { step: this.currentTaskNumber });
     }
   };
 
-  private handleTaskCheckClick = (evt: MouseEvent) => {
-    const tab = evt.target as HTMLElement;
-    const taskNumber = Number(tab.dataset.taskNumber);
+  private handleTaskCheckClick = () => {
+    this.sendXApiMessage(Verb.Hinted, { step: this.currentTaskNumber });
 
-    this.sendXApiMessage(Verb.Hinted, { step: taskNumber });
-
-    const task = findTask(taskNumber);
+    const task = findTask(this.currentTaskNumber);
     const isCorrect = checkTask(task);
 
     checkDisplay(task, isCorrect);
   };
 
-  render = () => {
-    return (
-      <div>
-        <div class="tab-content" id="tasks-tabs-content">
-          <div
-            class="tab-pane fade show active"
-            id="task-1-tab-content"
-            role="tabpanel"
-          >
-            <task-one />
+  private handleEomComplete = () => {
+    this.sendXApiMessage(Verb.Completed);
+  };
 
-            <div class="task-check container">
+  render = () => (
+    <div class="task-content">
+      <div class="tab-content" id="tasks-tabs-content">
+        <div
+          class="tab-pane fade show active"
+          id="task-1-tab-content"
+          role="tabpanel"
+        >
+          <task-one />
+        </div>
+
+        <div class="tab-pane fade" id="task-2-tab-content" role="tabpanel">
+          <task-two />
+        </div>
+
+        <div class="tab-pane fade" id="task-3-tab-content" role="tabpanel">
+          <task-three />
+        </div>
+      </div>
+
+      <footer class="task-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col d-flex align-items-center justify-content-start">
               <button
-                class="btn btn-success"
-                data-task-number={1}
+                class="btn btn-outline-success"
                 onClick={this.handleTaskCheckClick}
               >
                 Проверить задание
               </button>
             </div>
-          </div>
-
-          <div class="tab-pane fade" id="task-2-tab-content" role="tabpanel">
-            <task-two />
-
-            <div class="task-check container">
-              <button
-                class="btn btn-success"
-                data-task-number={2}
-                onClick={this.handleTaskCheckClick}
-              >
-                Проверить задание
-              </button>
+            <div class="col d-flex align-items-center justify-content-center">
+              <div class="pagination" id="tasks-tabs" role="tablist">
+                {[1, 2, 3].map((taskNumber) => (
+                  <div
+                    class={`page-item ${
+                      taskNumber === this.currentTaskNumber ? 'active' : ''
+                    }`}
+                    role="presentation"
+                  >
+                    <button
+                      class="page-link"
+                      data-task-number={taskNumber}
+                      onClick={this.handleTabSwitch}
+                      type="button"
+                      role="tab"
+                    >
+                      {taskNumber}
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div class="tab-pane fade" id="task-3-tab-content" role="tabpanel">
-            <task-three />
-
-            <div class="task-check container">
-              <button
-                class="btn btn-success"
-                data-task-number={3}
-                onClick={this.handleTaskCheckClick}
-              >
-                Проверить задание
+            <div class="col d-flex align-items-center justify-content-end">
+              <button class="btn btn-primary" onClick={this.handleEomComplete}>
+                Завершить
               </button>
             </div>
           </div>
         </div>
-
-        <ul
-          class="nav nav-pills justify-content-center mt-3 mb-4"
-          id="tasks-tabs"
-          role="tablist"
-        >
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              data-task-number={1}
-              onClick={this.handleTabSwitch}
-              type="button"
-              role="tab"
-            >
-              1
-            </button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              data-task-number={2}
-              onClick={this.handleTabSwitch}
-              type="button"
-              role="tab"
-            >
-              2
-            </button>
-          </li>
-
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              data-task-number={3}
-              onClick={this.handleTabSwitch}
-              type="button"
-              role="tab"
-            >
-              3
-            </button>
-          </li>
-        </ul>
-      </div>
-    );
-  };
+      </footer>
+    </div>
+  );
 }
